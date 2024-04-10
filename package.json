@@ -1,0 +1,16 @@
+{
+  "name": "prototipo-markforge",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "electron ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "electron": "^29.2.0",
+    "xlsx": "^0.18.5"
+  }
+}
