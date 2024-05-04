@@ -1,8 +1,11 @@
-const XLSX = require('xlsx');
+const { ipcRenderer, require } = window.electron;
+const xlsx = require('xlsx');
 const path = require('path');
 
 
+
 const excelFilePath = path.join(__dirname, './MARCA X PROVEEDOR.xlsx');
+
 
 function procesarDatos(data) {
     const proveedores = data[0].slice(1); // Obtener los nombres de los proveedores
@@ -64,7 +67,7 @@ function buscarMarcasPorProveedor(proveedor) {
 
     const proveedorIndex = data[0].indexOf(proveedor);
     if (proveedorIndex === -1) {
-        return null; // Proveedor no encontrado
+        return console.log(`No se encontro proveedor`); // Proveedor no encontrado
     }
 
     const marcas = [];
@@ -74,10 +77,18 @@ function buscarMarcasPorProveedor(proveedor) {
         }
     }
 
-    return marcas;
+    return console.log(`Las marcas asociadas al proveedor ${proveedor} son: ${marcas}`);;
 }
 
 // Ejemplo de uso
 const proveedor = 'ALFA RODAMIENTOS SRL';
-const marcas = buscarMarcasPorProveedor(proveedor);
-console.log(`Las marcas asociadas al proveedor ${proveedor} son: ${marcas}`);
+buscarMarcasPorProveedor(proveedor);
+
+function search() {
+    // Obtener el valor del input
+    userInput = document.getElementById('searchInput').value;
+
+    console.log('Input:', userInput);
+    buscarMarcasPorProveedor(userInput);
+    
+}
