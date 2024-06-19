@@ -1,13 +1,14 @@
-const { app, BrowserWindow } = require('electron');
-
-
+const { app, BrowserWindow, ipcMain } = require('electron');
+const path = require('path');
+const { buscarProveedorPrincipal, buscarMarcasPorProveedor, obtenerDatosIniciales } = require('./db');
 function createWindow() {
-    let win = new BrowserWindow({
+    const win = new BrowserWindow({
         width: 800,
         height: 600,
         webPreferences: {
-            nodeIntegration : true,
-            preload: "./preload.js"
+            preload: path.join(__dirname, 'preload.js'),
+            contextIsolation: true,
+            enableRemoteModule: false
         }
     });
 
@@ -26,4 +27,16 @@ app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
         createWindow();
     }
+});
+
+ipcMain.handle('buscar-proveedor-principal', async (event, marca) => {
+    return await buscarProveedorPrincipal(marca);
+});
+
+ipcMain.handle('buscar-marcas-por-proveedor', async (event, proveedor) => {
+    return await buscarMarcasPorProveedor(proveedor);
+});
+
+ipcMain.handle('obtener-datos-iniciales', async () => {
+    return await obtenerDatosIniciales()
 });

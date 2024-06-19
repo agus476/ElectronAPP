@@ -1,12 +1,7 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
-contextBridge.exposeInMainWorld('electron', {
-    ipcRenderer: ipcRenderer,
-    require: (moduleName) => {
-        try {
-            return require(moduleName);
-        } catch (e) {
-            console.error(e);
-        }
-    }
+contextBridge.exposeInMainWorld('api', {
+    buscarProveedorPrincipal: (marca) => ipcRenderer.invoke('buscar-proveedor-principal', marca),
+    buscarMarcasPorProveedor: (proveedor) => ipcRenderer.invoke('buscar-marcas-por-proveedor', proveedor),
+    obtenerDatosIniciales: () => ipcRenderer.invoke('obtener-datos-iniciales')
 });
