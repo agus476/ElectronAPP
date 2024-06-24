@@ -19,7 +19,7 @@ async function buscarProveedorPrincipal(marca) {
             JOIN marcas m ON m.marca_id = a.marca_id
             WHERE m.nombre_marca = $1 AND (a.tipo_proveedor = 'P' OR a.tipo_proveedor = 'S') ;
         `, [marca]);
-        return res.rows;
+        return res.rows.map(row => row.nombre_proveedor);
     } catch (err) {
         console.error(err);
         throw err;
@@ -35,23 +35,22 @@ async function buscarMarcasPorProveedor(proveedor) {
             JOIN proveedores p ON p.proveedor_id = a.proveedor_id
             WHERE p.nombre_proveedor = $1;
         `, [proveedor]);
-        return res.rows;
+        return res.rows.map(row => row.nombre_marca);
     } catch (err) {
         console.error(err);
         throw err;
     }
 }
-async function obtenerDatosIniciales() {
+async function obtenerProveedores() {
     const res = await client.query('SELECT DISTINCT nombre_proveedor FROM proveedores ORDER BY nombre_proveedor ASC');
     return res.rows.map(row => row.nombre_proveedor);
 }
 
+
 module.exports = {
+    client,
     buscarProveedorPrincipal,
     buscarMarcasPorProveedor,
-    obtenerDatosIniciales
+    obtenerProveedores,
 };
-
-
-module.exports = client;
 

@@ -1,6 +1,7 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
-const { buscarProveedorPrincipal, buscarMarcasPorProveedor, obtenerDatosIniciales } = require('./db');
+const db = require('./database/db');
+
 function createWindow() {
     const win = new BrowserWindow({
         width: 800,
@@ -12,7 +13,7 @@ function createWindow() {
         }
     });
 
-    win.loadFile('index.html');
+    win.loadFile('ui/index.html');
 }
 
 app.whenReady().then(createWindow);
@@ -30,13 +31,22 @@ app.on('activate', () => {
 });
 
 ipcMain.handle('buscar-proveedor-principal', async (event, marca) => {
-    return await buscarProveedorPrincipal(marca);
+    console.log('buscarProveedorPrincipal called with:', marca);
+    const result = await db.buscarProveedorPrincipal(marca);
+    console.log('Result:', result);
+    return result;
 });
 
 ipcMain.handle('buscar-marcas-por-proveedor', async (event, proveedor) => {
-    return await buscarMarcasPorProveedor(proveedor);
+    console.log('buscarMarcasPorProveedor called with:', proveedor);
+    const result = await db.buscarMarcasPorProveedor(proveedor);
+    console.log('Result:', result);
+    return result;
 });
 
-ipcMain.handle('obtener-datos-iniciales', async () => {
-    return await obtenerDatosIniciales()
+ipcMain.handle('obtener-proveedores', async (event) => {
+    console.log('obtenerproveedores called');
+    const result = await db.obtenerProveedores();
+    console.log('Result:', result);
+    return result;
 });
